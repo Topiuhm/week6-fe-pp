@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import BookPreview from "../components/BookPreview";
 
-const BookPage = () => {
+const BookPage = ({ isAuthenticated }) => {
   const [book, setBook] = useState(null);
 
   const navigate = useNavigate();
@@ -18,10 +17,13 @@ const BookPage = () => {
       console.error("Failed to fetch book details");
     }
   }
-
   async function deleteBook(id) {
+    const token = JSON.parse(localStorage.getItem("user"))?.token;
     const response = await fetch(`/api/books/${bookId}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      }
     });
     if (response.ok) {
       navigate("/");
@@ -33,10 +35,24 @@ const BookPage = () => {
   useEffect(() => {
     fetchBook();
   }, []);
-
+if (!book){
+  return <div>Loading...</div>;
+}
   return (
     <div className="book-preview">
-      {book && <BookPreview book={book} onDelete={() => deleteBook(book.id)} />}
+      <>
+        <h2>{book.title}</h2>
+        <p>Author: {book.author}</p>
+        <p>ISBN: {book.isbn}</p>
+        <p>Publisher: {book.publisher}</p>
+        <p>Genre: {book.genre}</p>
+        <p>Available: {book.availability.isAvailable ? "Yes" : "No"}</p>
+        <p>Due Date: {book.availability.dueDate || "N/A"}</p>
+        <p>Borrower: {book.availability.borrower || "None"}</p>
+        <button onClick={() => navigate("/")}>Back</button>
+        {isAuthenticated && <><button onClick={() => deleteBook(book._id)}>Delete</button>
+          <button onClick={() => navigate("/edit-book/" + book._id)}>Edit</button></>}
+      </>
     </div>
   );
 };

@@ -15,9 +15,11 @@ const AddBookPage = () => {
         borrower
       }
     };
+    const token = JSON.parse(localStorage.getItem("user"))?.token;
     const response = await fetch("/api/books", {
       method: "POST",
       headers: {
+        "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify(newBook)

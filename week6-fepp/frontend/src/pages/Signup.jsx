@@ -1,6 +1,8 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +32,7 @@ export default function Signup() {
       const userData = await response.json();
       console.log(userData);
       localStorage.setItem("user", JSON.stringify(userData));
+      navigate("/");
     } else {
       console.error("Failed to register new user");
     }

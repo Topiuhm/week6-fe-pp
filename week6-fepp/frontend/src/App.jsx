@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState } from "react";
 
 // pages & components
 import Home from "./pages/HomePage";
@@ -11,19 +12,19 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem("user"))
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
+        <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/add-book" element={<AddBookPage />} />
-            <Route path="/books/:id" element={<BookPage />} />
-            <Route path="/edit-book/:id" element={<EditBookPage />} />
-            
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/add-book" element={isAuthenticated ? <AddBookPage /> : <Navigate to="/signup" />} />
+            <Route path="/books/:id" element={<BookPage isAuthenticated={isAuthenticated} />} />
+            <Route path="/edit-book/:id" element={isAuthenticated ? <EditBookPage /> : <Navigate to="/signup" />} />
+            <Route path="/signup" element={!isAuthenticated ? <Signup /> : <Navigate to="/" />} />
+            <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/" />} />
 
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

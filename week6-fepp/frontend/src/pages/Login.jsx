@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function loginUser() {
     const response = await fetch("/api/users/login", {
@@ -20,6 +22,7 @@ export default function Login() {
       const userData = await response.json();
       console.log(userData);
       localStorage.setItem("user", JSON.stringify(userData));
+      navigate("/");
     } else {
       console.error("Failed to login");
     }
