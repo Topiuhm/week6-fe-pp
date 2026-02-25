@@ -5,6 +5,7 @@ import Home from "./pages/HomePage";
 import AddBookPage from "./pages/AddBookPage";
 import Navbar from "./components/Navbar";
 import NotFoundPage from "./pages/NotFoundPage";
+import BookPage from "./pages/BookPage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/add-book" element={<AddBookPage />} />
+            <Route path="/books/:id" element={<BookPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
