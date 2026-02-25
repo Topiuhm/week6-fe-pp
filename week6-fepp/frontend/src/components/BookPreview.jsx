@@ -14,6 +14,7 @@ export default function BookPreview({ book, onDelete }) {
       <p>Borrower: {book.availability.borrower || "None"}</p>
       <button onClick={() => navigate("/")}>Back</button>
       <button onClick={() => onDelete()}>Delete</button>
+      <button onClick={() => navigate("/edit-book/"+book._id)}>Edit</button>
     </>
   );
 }
